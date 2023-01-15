@@ -1,24 +1,22 @@
-import type { Component } from 'solid-js';
+import { Component, createSignal, onMount } from 'solid-js';
 
-import logo from './logo.svg';
 import styles from './App.module.css';
 
 const App: Component = () => {
+  const [text, setText] = createSignal<string>('...');
+  
+  onMount(async () => {
+    setText('Please wait...');
+    const response = await fetch(`https://script.google.com/macros/s/'AKfycbxoduFncCTz0gTtsYG2xT-BMOu3vXRE4BmZtomrJDvfKLbP_jIWFQkydhZvajGus7uC/exec`, { method: 'POST'});
+    setText(await response.json());
+  });
+  
   return (
     <div class={styles.App}>
       <header class={styles.header}>
-        <img src={logo} class={styles.logo} alt="logo" />
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          { text }
         </p>
-        <a
-          class={styles.link}
-          href="https://github.com/solidjs/solid"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Solid
-        </a>
       </header>
     </div>
   );

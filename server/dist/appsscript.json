@@ -1,0 +1,15 @@
+{
+  "timeZone": "Europe/Paris",
+  "dependencies": {
+    "libraries": []
+  },
+  "webapp": {
+    "executeAs": "USER_DEPLOYING",
+    "access": "ANYONE_ANONYMOUS"
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "executionApi": {
+    "access": "MYSELF"
+  },
+  "runtimeVersion": "V8"
+}
