@@ -7,8 +7,14 @@ const App: Component = () => {
   
   onMount(async () => {
     setText('Please wait...');
-    const response = await fetch(`https://script.google.com/macros/s/AKfycbxoduFncCTz0gTtsYG2xT-BMOu3vXRE4BmZtomrJDvfKLbP_jIWFQkydhZvajGus7uC/exec?command=xyz`, { method: 'POST' });
-    setText(await response.json());
+    google.script.run
+      .withSuccessHandler((response: string) => {
+        setText(response);
+      })
+      .withFailureHandler((err: any) => {
+
+      })
+      .doPost({ parameter: { command: 'xyz' }});
   });
   
   return (

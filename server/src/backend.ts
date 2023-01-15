@@ -6,7 +6,7 @@ export default {
   },
 
   doPost: (e: { parameter: { command: string } }) => {
-    return ContentService.createTextOutput(JSON.stringify(e.parameter));
+    return JSON.stringify(e.parameter);
   }
   
 }
