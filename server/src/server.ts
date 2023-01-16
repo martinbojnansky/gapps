@@ -14,7 +14,11 @@ const serviceProviders: {
 export default {
   doGet: () => {
     const template = HtmlService.createTemplateFromFile("index");
-    return template.evaluate();
+    let output = template.evaluate();
+    output = output.setXFrameOptionsMode(
+      HtmlService.XFrameOptionsMode.ALLOWALL
+    );
+    return output;
   },
 
   doPost: (e: { postData: { contents: string } }) => {

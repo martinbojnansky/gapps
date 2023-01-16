@@ -14,12 +14,16 @@ export function api<
 ): void {
   google.script.run
     .withSuccessHandler((response: TResponse) => {
-      console.log("GApp ok", response);
+      console.log("GApps OK", response);
       subscriber?.onSuccess?.(response);
     })
     .withFailureHandler((err: Error) => {
-      console.log("GApp error", err);
-      subscriber?.onError?.(err);
+      console.log("GApps ERR", err);
+      if (subscriber?.onError) {
+        subscriber.onError(err);
+      } else {
+        throw err;
+      }
     })
     .doPost({
       postData: {
