@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   mode: 'development',
-  entry: './src/backend.ts',
+  entry: './src/server.ts',
   module: {
     rules: [
       {
@@ -16,9 +16,9 @@ module.exports = {
     extensions: ['.ts', '.js'],
   },
   output: {
-    filename: 'backend.bundle.js',
+    filename: 'server.js',
     path: path.resolve(__dirname, 'dist'),
     libraryTarget: 'var',
-    library: 'backend'
+    library: 'server'
   },
 };

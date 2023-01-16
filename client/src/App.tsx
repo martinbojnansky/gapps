@@ -14,7 +14,7 @@ const App: Component = () => {
       .withFailureHandler((err: any) => {
 
       })
-      .doPost({ parameter: { command: 'xyz' }});
+      .doPost({ postData: { contents: JSON.stringify({ action: 'getGreeting', payload: 'Martin' })}});
   });
   
   return (

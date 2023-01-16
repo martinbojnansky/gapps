@@ -1,13 +1,13 @@
 {
-  "name": "gapps.backend",
+  "name": "gapps.server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
-    "deploy": "webpack & clasp push & clasp deploy -i AKfycbxoduFncCTz0gTtsYG2xT-BMOu3vXRE4BmZtomrJDvfKLbP_jIWFQkydhZvajGus7uC -d dev",
-    "deploy:test": "webpack & clasp push & clasp deploy -i AKfycbwklFUQk36WAf5NvTj_KgGJN99fPE-Oq5mmERqI_exi4LwRMECyOQrIB262C3YoWBOt -d test",
-    "deploy:prod": "webpack & clasp push & clasp deploy -i AKfycbz_Nd7Rs5Ng2Nv5SUfmtrCA5Pul_zPvqZJHs1o2D-3qsyEY3_reVlldaoOHyY3cfnKt -d prod"
+    "build": "webpack & cd ../client & npm run build",
+    "deploy": "npm run build & clasp push & clasp deploy -i AKfycbxoduFncCTz0gTtsYG2xT-BMOu3vXRE4BmZtomrJDvfKLbP_jIWFQkydhZvajGus7uC -d dev",
+    "deploy:test": "npm run build & clasp push & clasp deploy -i AKfycbwklFUQk36WAf5NvTj_KgGJN99fPE-Oq5mmERqI_exi4LwRMECyOQrIB262C3YoWBOt -d test",
+    "deploy:prod": "npm run build & clasp push & clasp deploy -i AKfycbz_Nd7Rs5Ng2Nv5SUfmtrCA5Pul_zPvqZJHs1o2D-3qsyEY3_reVlldaoOHyY3cfnKt -d prod"
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,26 @@
+{
+  "name": "gapps",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "i": "npm i && cd server && npm i && cd ../client && npm i",
+    "ci": "npm ci && cd server && npm ci && cd ../client && npm ci",
+    "build": "cd server && npm run build && cd ../client && npm run build",
+    "deploy": "cd server && npm run deploy",
+    "deploy:test": "cd server && npm run deploy:test",
+    "deploy:prod": "cd server && npm run deploy:prod"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinbojnansky/gapps.git"
+  },
+  "author": "Martin Bojnansky",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/martinbojnansky/gapps/issues"
+  },
+  "homepage": "https://github.com/martinbojnansky/gapps#readme",
+  "devDependencies": {
+    "prettier": "^2.8.3"
+  }
+}

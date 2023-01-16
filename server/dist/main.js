@@ -1,7 +1,7 @@
 function doGet() {
-  return backend.default.doGet();
+  return server.default.doGet();
 }
 
 function doPost(e) {
-  return backend.default.doPost(e);
+  return server.default.doPost(e);
 }

@@ -9,5 +9,7 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
+    outDir: '../server/dist',
+    emptyOutDir: false
   },
 });

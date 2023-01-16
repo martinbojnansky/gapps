@@ -1,4 +1,4 @@
 # compiled output
-dist/backend.bundle.js
+dist/server.js
 dist/index.html
 node_modules/
