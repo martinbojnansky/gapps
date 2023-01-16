@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import solidPlugin from 'vite-plugin-solid';
-import { viteSingleFile } from "vite-plugin-singlefile"
+import { viteSingleFile } from 'vite-plugin-singlefile';
 
 export default defineConfig({
   plugins: [solidPlugin(), viteSingleFile()],
@@ -10,6 +10,6 @@ export default defineConfig({
   build: {
     target: 'esnext',
     outDir: '../server/dist',
-    emptyOutDir: false
+    emptyOutDir: false,
   },
 });

@@ -1,8 +1,8 @@
 import { Component, createSignal, onMount } from 'solid-js';
-import styles from './App.module.css';
-import { api } from './Api';
+import styles from './AppView.module.scss';
+import { api } from '../../utils/Api';
 
-const App: Component = () => {
+const AppView: Component = () => {
   const [text, setText] = createSignal<string>('...');
   
   onMount(async () => {
@@ -14,7 +14,7 @@ const App: Component = () => {
   });
   
   return (
-    <div class={styles.App}>
+    <div class={styles.AppView}>
       <header class={styles.header}>
         <p>
           { text }
@@ -24,4 +24,4 @@ const App: Component = () => {
   );
 };
 
-export default App;
+export default AppView;

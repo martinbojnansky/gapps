@@ -1,4 +1,4 @@
-import { Actions } from "../../api/api";
+import { Actions } from "../../../api/api";
 
 export function api<
   TKey extends keyof Actions,
