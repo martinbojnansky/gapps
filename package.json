@@ -8,7 +8,9 @@
     "build": "cd server && npm run build && cd ../client && npm run build",
     "deploy": "cd server && npm run deploy",
     "deploy:test": "cd server && npm run deploy:test",
-    "deploy:prod": "cd server && npm run deploy:prod"
+    "deploy:prod": "cd server && npm run deploy:prod",
+    "cypress": "npx cypress open",
+    "cypress:prod": "npx cypress run"
   },
   "repository": {
     "type": "git",
@@ -21,6 +23,9 @@
   },
   "homepage": "https://github.com/martinbojnansky/gapps#readme",
   "devDependencies": {
-    "prettier": "^2.8.3"
+    "@types/node": "^18.11.18",
+    "cypress": "^12.3.0",
+    "prettier": "^2.8.3",
+    "typescript": "^4.9.4"
   }
 }
