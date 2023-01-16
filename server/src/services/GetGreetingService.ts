@@ -1,4 +1,4 @@
-import { ActionService } from "./action.service";
+import { ActionService } from "./ActionService";
 
 export class GetGreetingService extends ActionService<string, string> {
   constructor() {

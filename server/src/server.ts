@@ -1,17 +1,19 @@
-import { ActionService } from "./services/action.service";
+import { ActionService } from "./services/ActionService";
 import { ActionRequest, Actions } from "../../api/api";
-import { GetGreetingService } from "./services/getGreeting.service";
+import { GetGreetingService } from "./services/GetGreetingService";
 
 const serviceProviders: {
-  [TKey in keyof Actions]: () => ActionService<Actions[TKey][0], Actions[TKey][1]>;
+  [TKey in keyof Actions]: () => ActionService<
+    Actions[TKey][0],
+    Actions[TKey][1]
+  >;
 } = {
-  getGreeting: () => new GetGreetingService()
+  getGreeting: () => new GetGreetingService(),
 };
 
 export default {
-  
   doGet: () => {
-    const template = HtmlService.createTemplateFromFile('index');
+    const template = HtmlService.createTemplateFromFile("index");
     return template.evaluate();
   },
 
@@ -21,11 +23,8 @@ export default {
       const service = serviceProviders[request.action]();
       const response = service.run(request.payload as any);
       return JSON.stringify(response);
-    } catch(ex) {
+    } catch (ex) {
       throw ex;
     }
-  }
-  
-}
-
-
+  },
+};
