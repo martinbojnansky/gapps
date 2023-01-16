@@ -2,6 +2,6 @@
 import { render } from 'solid-js/web';
 
 import './styles/main.scss';
-import AppView from './views/app/AppView';
+import App from './App';
 
-render(() => <AppView />, document.getElementById('root') as HTMLElement);
+render(() => <App />, document.getElementById('root') as HTMLElement);
