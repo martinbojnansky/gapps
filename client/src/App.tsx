@@ -5,11 +5,11 @@ import { api } from './utils/Api';
 const App: Component = () => {
   const [text, setText] = createSignal<string>('...');
 
-  onMount(async () => {
+  onMount(() => {
     setText('Please wait...');
     api('getGreeting', 'Martin', {
       onSuccess: (greeting) => setText(greeting),
-      onError: (err) => setText('Error. Try again, please.'),
+      onError: (err) => setText('Network error, try again, please.'),
     });
   });
 
