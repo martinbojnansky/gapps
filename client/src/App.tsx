@@ -14,8 +14,19 @@ const App: Component = () => {
   });
 
   return (
-    <div class="d-flex flex-row justify-content-center">
-      <h1 class="p-5">{text}</h1>
+    <div class="d-flex flex-column">
+      <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            🔥 GApps
+          </a>
+        </div>
+      </nav>
+      <main class="px-4 py-3">
+        <div class="d-flex flex-row justify-content-center">
+          <h1>{text}</h1>
+        </div>
+      </main>
     </div>
   );
 };
