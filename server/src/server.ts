@@ -1,6 +1,6 @@
 import { ActionService } from './services/ActionService';
 import { ActionRequest, Actions } from '../../api/api';
-import { GetGreetingService } from './services/GetGreetingService';
+import { InitStateService } from './services/InitStateService';
 
 const serviceProviders: {
   [TKey in keyof Actions]: () => ActionService<
@@ -8,7 +8,7 @@ const serviceProviders: {
     Actions[TKey][1]
   >;
 } = {
-  getGreeting: () => new GetGreetingService(),
+  initState: () => new InitStateService(),
 };
 
 export default {

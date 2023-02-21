@@ -7,8 +7,8 @@ const App: Component = () => {
 
   onMount(() => {
     setText('Please wait...');
-    api('getGreeting', 'Martin', {
-      onSuccess: (greeting) => setText(greeting),
+    api('initState', [], {
+      onSuccess: (state) => setText(state.greeting),
       onError: (err) => setText('Network error, try again, please.'),
     });
   });

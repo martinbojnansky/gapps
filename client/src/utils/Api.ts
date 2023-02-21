@@ -1,4 +1,4 @@
-import { Actions } from "../../../api/api";
+import { Actions } from '../../../api/api';
 
 export function api<
   TKey extends keyof Actions,
@@ -13,12 +13,14 @@ export function api<
   }
 ): void {
   google.script.run
-    .withSuccessHandler((response: TResponse) => {
-      console.log("GApps OK", response);
-      subscriber?.onSuccess?.(response);
+    .withSuccessHandler((response: any) => {
+      try {
+        subscriber?.onSuccess?.(JSON.parse(response) as TResponse);
+      } catch {
+        subscriber?.onSuccess?.(response as TResponse);
+      }
     })
     .withFailureHandler((err: Error) => {
-      console.log("GApps ERR", err);
       if (subscriber?.onError) {
         subscriber.onError(err);
       } else {

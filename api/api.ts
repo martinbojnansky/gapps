@@ -4,5 +4,9 @@ export interface ActionRequest {
 }
 
 export interface Actions {
-  getGreeting: [string, string];
+  initState: [[], State];
+}
+
+export interface State {
+  greeting: string;
 }
