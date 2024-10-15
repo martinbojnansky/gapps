@@ -4,9 +4,10 @@ export interface ActionRequest {
 }
 
 export interface Actions {
-  initState: [[], State];
+  getEventsForDay: [string, State];
 }
 
 export interface State {
-  greeting: string;
+  selectedDate: string;
+  events: string[];
 }

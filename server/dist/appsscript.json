@@ -4,12 +4,12 @@
     "libraries": []
   },
   "webapp": {
-    "executeAs": "USER_DEPLOYING",
-    "access": "ANYONE_ANONYMOUS"
+    "access": "ANYONE",
+    "executeAs": "USER_ACCESSING"
   },
   "exceptionLogging": "STACKDRIVER",
   "executionApi": {
-    "access": "MYSELF"
+    "access": "ANYONE"
   },
   "runtimeVersion": "V8"
 }

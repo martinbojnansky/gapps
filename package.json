@@ -7,7 +7,6 @@
     "ci": "npm ci && cd server && npm ci && cd ../client && npm ci",
     "build": "cd server && npm run build && cd ../client && npm run build",
     "deploy": "cd server && npm run deploy",
-    "deploy:test": "cd server && npm run deploy:test",
     "deploy:prod": "cd server && npm run deploy:prod",
     "cypress": "npx cypress open",
     "cypress:prod": "npx cypress run"

@@ -3,13 +3,17 @@ import styles from './App.module.scss';
 import { api } from './utils/Api';
 
 const App: Component = () => {
-  const [text, setText] = createSignal<string>('...');
+  const [selectedDate, setSelectedDate] = createSignal<Date>(new Date());
+  const [events, setEvents] = createSignal<string>('...');
 
   onMount(() => {
-    setText('Please wait...');
-    api('initState', [], {
-      onSuccess: (state) => setText(state.greeting),
-      onError: (err) => setText('Network error, try again, please.'),
+    setEvents('Please wait...');
+    api('getEventsForDay', selectedDate().toISOString(), {
+      onSuccess: (state) => {
+        setSelectedDate(new Date(state.selectedDate));
+        setEvents(state.events.join(', '));
+      },
+      onError: (err) => setEvents('Network error, try again, please.'),
     });
   });
 
@@ -18,13 +22,14 @@ const App: Component = () => {
       <nav class="navbar bg-body-tertiary">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">
-            🔥 GApps
+            🎾 GBC - Tennis Reservations
           </a>
         </div>
       </nav>
       <main class="px-4 py-3">
         <div class="d-flex flex-row justify-content-center">
-          <h1>{text}</h1>
+          <p>{selectedDate().toString()}</p>
+          <h1>{events()}</h1>
         </div>
       </main>
     </div>
