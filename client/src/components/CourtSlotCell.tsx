@@ -1,8 +1,8 @@
-export default function TimeSlotCell(props: { value: string }) {
+export default function CourtSlotCell(props: { value: string }) {
   return (
     <span
       class={
-        'badge ' + `${props.value === 'Free' ? 'bg-success' : 'bg-secondary'}`
+        'badge ' + `${props.value === 'Free' ? 'bg-success' : 'bg-danger'}`
       }
     >
       {props.value}

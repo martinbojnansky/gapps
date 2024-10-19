@@ -1,45 +1,65 @@
-import { Component, createSignal, For, onMount } from 'solid-js';
+import { Component, createEffect, createSignal, For, onMount } from 'solid-js';
 import styles from './App.module.scss';
 import { api } from './utils/Api';
 import { Slot } from '../../api/api';
 import TimeSlotCell from './components/TimeSlotCell';
 import CourtSlotCell from './components/CourtSlotCell';
+import ProgressRow from './components/ProgressRow';
+import DatePicker from './components/DatePicker';
 
 const App: Component = () => {
-  const [selectedDate, setSelectedDate] = createSignal<Date>(new Date());
+  const [busy, setBusy] = createSignal<boolean>(false);
+  const [selectedDate, setSelectedDate] = createSignal<string>(
+    new Date().toISOString()
+  );
   const [slots, setSlots] = createSignal<Slot[]>([]);
+  const [filteredSlots, setFilteredSlots] = createSignal<Slot[]>([]);
 
-  onMount(() => {
-    setSlots([]); // TODO: Show loading
-    api('getSlotsForDay', selectedDate().toISOString(), {
+  createEffect(() => {
+    setBusy(true);
+    setSlots([]);
+    api('getSlotsForDay', selectedDate(), {
       onSuccess: (state) => {
-        setSelectedDate(new Date(state.selectedDate));
+        setSelectedDate(state.selectedDate);
         setSlots(state.slots);
+        setBusy(false);
       },
-      onError: (err) => setSlots([]), // TODO: Display error
+      onError: (err) => {
+        setSlots([]);
+        setBusy(false);
+      },
     });
   });
 
+  createEffect(() => {
+    setFilteredSlots(slots());
+  });
+
+  onMount(() => {});
+
   return (
     <div class="d-flex flex-column">
-      <nav class="navbar bg-body-tertiary">
+      {/* navbar */}
+      <nav class="navbar bg-success">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">
             🎾 GBC - Tennis Reservations
           </a>
         </div>
       </nav>
+      {/* main */}
       <main class="px-4 py-3">
-        <div class="d-flex flex-column align-items-center">
-          <p>{selectedDate().toDateString()}</p>
-          <div class="d-flex flex-row">
-            <span>Filters:</span>
-            <span class="badge bg-secondary">Tennis free</span>
-            <span class="badge bg-secondary">Pickle free</span>
-            <span class="badge bg-secondary">Pro free</span>
-            <span class="badge bg-secondary">Pro booked</span>
+        <div class="d-flex flex-column">
+          {/* date picker */}
+          <div class="d-flex flex-row mb-3 align-self-start">
+            <DatePicker
+              value={selectedDate()}
+              onValueChange={setSelectedDate}
+            />
           </div>
+          {/* table */}
           <table class="table">
+            {/* table header */}
             <thead>
               <tr>
                 <th>Time Slot</th>
@@ -50,29 +70,35 @@ const App: Component = () => {
                 <th>Pro</th>
               </tr>
             </thead>
+            {/* table body */}
             <tbody>
-              <For each={slots()}>
+              {/* progress row */}
+              <ProgressRow visible={busy()} colSpan={6} />
+              {/* table rows */}
+              <For each={filteredSlots()}>
                 {(slot) => (
-                  <tr>
-                    <td>
-                      <TimeSlotCell start={slot.start} end={slot.end} />
-                    </td>
-                    <td>
-                      <CourtSlotCell value={slot.tennis1} />
-                    </td>
-                    <td>
-                      <CourtSlotCell value={slot.tennis2} />
-                    </td>
-                    <td>
-                      <CourtSlotCell value={slot.pickle1} />
-                    </td>
-                    <td>
-                      <CourtSlotCell value={slot.pickle2} />
-                    </td>
-                    <td>
-                      <CourtSlotCell value={slot.pro} />
-                    </td>
-                  </tr>
+                  <>
+                    <tr>
+                      <th>
+                        <TimeSlotCell start={slot.start} end={slot.end} />
+                      </th>
+                      <td>
+                        <CourtSlotCell value={slot.tennis1} />
+                      </td>
+                      <td>
+                        <CourtSlotCell value={slot.tennis2} />
+                      </td>
+                      <td>
+                        <CourtSlotCell value={slot.pickle1} />
+                      </td>
+                      <td>
+                        <CourtSlotCell value={slot.pickle2} />
+                      </td>
+                      <td>
+                        <CourtSlotCell value={slot.pro} />
+                      </td>
+                    </tr>
+                  </>
                 )}
               </For>
             </tbody>
