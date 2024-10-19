@@ -1,6 +1,6 @@
 import { ActionService } from './services/ActionService';
 import { ActionRequest, Actions } from '../../api/api';
-import { GetEventsForDayService } from './services/GetEventsForDayService';
+import { GetSlotsForDayService } from './services/GetSlotsForDayService';
 
 const serviceProviders: {
   [TKey in keyof Actions]: () => ActionService<
@@ -8,7 +8,7 @@ const serviceProviders: {
     Actions[TKey][1]
   >;
 } = {
-  getEventsForDay: () => new GetEventsForDayService(),
+  getSlotsForDay: () => new GetSlotsForDayService(),
 };
 
 export default {

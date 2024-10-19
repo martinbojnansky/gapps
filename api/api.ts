@@ -4,10 +4,20 @@ export interface ActionRequest {
 }
 
 export interface Actions {
-  getEventsForDay: [string, State];
+  getSlotsForDay: [string, State];
+}
+
+export interface Slot {
+  start: string;
+  end: string;
+  tennis1: string;
+  tennis2: string;
+  pickle1: string;
+  pickle2: string;
+  pro: string;
 }
 
 export interface State {
   selectedDate: string;
-  events: string[];
+  slots: Slot[];
 }
