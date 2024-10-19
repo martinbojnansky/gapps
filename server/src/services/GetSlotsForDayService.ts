@@ -8,7 +8,6 @@ export class GetSlotsForDayService extends ActionService<string, State> {
     );
     const selectedDate = new Date(selectedDateString);
     const events = calendar.getEventsForDay(selectedDate);
-    Logger.log(events.map((e) => e.getDescription()).join('\n'));
     return {
       selectedDate: selectedDate.toISOString(),
       slots: events.map((e) => ({
