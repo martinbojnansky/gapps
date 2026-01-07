@@ -1,10 +1,19 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Habits</title>
-    
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
     <style>
       html,
       body {
@@ -21,12 +30,259 @@
         border: 0;
         overflow: auto;
       }
+
+      .fab-container {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+      }
+
+      /* Primary theme override */
+      :root {
+        --primary: rgb(11, 87, 208);
+      }
+
+      /* Buttons */
+      .btn,
+      .btn-large,
+      .btn-small {
+        background-color: var(--primary) !important;
+      }
+
+      /* Floating Action Button */
+      .btn-floating {
+        background-color: var(--primary) !important;
+      }
+
+      /* Progress bar */
+      .progress .indeterminate {
+        background-color: var(--primary) !important;
+      }
+
+      /* Input focus underline */
+      .input-field input:focus {
+        border-bottom: 2px solid var(--primary) !important;
+        box-shadow: 0 1px 0 0 var(--primary) !important;
+      }
+
+      /* Input label on focus */
+      .input-field input:focus + label {
+        color: var(--primary) !important;
+      }
+
+      /* Modal footer buttons */
+      .modal-footer .btn {
+        background-color: var(--primary) !important;
+      }
     </style>
-
   </head>
-  <body>
 
-    <iframe src="https://calendar.google.com/calendar/embed?src=<?= calendarId ?>&mode=AGENDA"></iframe>
-  
+  <body>
+    <!-- Calendar -->
+    <iframe
+      id="calendar"
+      src="https://calendar.google.com/calendar/embed?src=<?= calendarId ?>&mode=WEEK"
+    ></iframe>
+
+    <!-- Floating Action Button -->
+    <div class="fab-container">
+      <a class="btn-floating btn-large modal-trigger" href="#iceBathModal">
+        <i class="material-icons">add</i>
+      </a>
+    </div>
+
+    <!-- Modal -->
+    <div id="iceBathModal" class="modal">
+      <form id="iceBathForm">
+        <div class="modal-content">
+          <!-- Success / Error Messages -->
+          <div
+            id="formMessage"
+            style="display: none; padding: 8px; border-radius: 4px"
+          ></div>
+
+          <!-- Start Date -->
+          <div class="input-field">
+            <input id="date" name="date" type="datetime-local" required />
+            <label for="date" class="active">Start Date & Time *</label>
+            <span
+              class="helper-text"
+              id="dateError"
+              style="color: red; display: none"
+              >Required</span
+            >
+          </div>
+
+          <!-- Duration Row -->
+          <div class="row">
+            <div class="input-field col s6">
+              <input
+                id="minutes"
+                name="minutes"
+                type="number"
+                min="0"
+                required
+              />
+              <label for="minutes" class="active">Minutes *</label>
+              <span
+                class="helper-text"
+                id="minutesError"
+                style="color: red; display: none"
+                >Required</span
+              >
+            </div>
+
+            <div class="input-field col s6">
+              <input
+                id="seconds"
+                name="seconds"
+                type="number"
+                min="0"
+                max="59"
+                required
+              />
+              <label for="seconds" class="active">Seconds *</label>
+              <span
+                class="helper-text"
+                id="secondsError"
+                style="color: red; display: none"
+                >Required</span
+              >
+            </div>
+          </div>
+
+          <!-- Optional -->
+          <div class="input-field">
+            <input id="waterTemp" name="waterTemp" type="number" step="0.1" />
+            <label for="waterTemp" class="active">Water Temperature (°C)</label>
+          </div>
+
+          <!-- Progress Bar -->
+          <div id="progressContainer" style="display: none; margin-top: 20px">
+            <div class="progress">
+              <div class="indeterminate"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="modal-close btn-flat">Cancel</button>
+          <button type="submit" class="btn blue">Save</button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const modalElem = document.getElementById('iceBathModal');
+
+        M.Modal.init(modalElem, {
+          onOpenEnd: () => {
+            const now = new Date();
+            const localISO = new Date(
+              now.getTime() - now.getTimezoneOffset() * 60000,
+            )
+              .toISOString()
+              .slice(0, 16);
+
+            document.getElementById('date').value = localISO;
+            document.getElementById('minutes').value = '';
+            document.getElementById('seconds').value = '';
+
+            document.getElementById('minutes').focus();
+            M.updateTextFields();
+          },
+        });
+
+        // Attach form submit handler
+        document
+          .getElementById('iceBathForm')
+          .addEventListener('submit', submitIceBath);
+      });
+
+      function showError(id, show) {
+        document.getElementById(id).style.display = show ? 'block' : 'none';
+      }
+
+      function showMessage(text, isError = false) {
+        const box = document.getElementById('formMessage');
+        box.style.display = 'block';
+        box.style.background = isError ? '#ffebee' : '#e8f5e9';
+        box.style.color = isError ? '#c62828' : '#2e7d32';
+        box.innerText = text;
+      }
+
+      function submitIceBath(event) {
+        event.preventDefault(); // prevent page reload
+
+        const dateInput = document.getElementById('date');
+        const minutesInput = document.getElementById('minutes');
+        const secondsInput = document.getElementById('seconds');
+        const waterTempInput = document.getElementById('waterTemp');
+
+        let valid = true;
+
+        if (!dateInput.value) {
+          showError('dateError', true);
+          valid = false;
+        } else showError('dateError', false);
+
+        if (!minutesInput.value) {
+          showError('minutesError', true);
+          valid = false;
+        } else showError('minutesError', false);
+
+        if (!secondsInput.value) {
+          showError('secondsError', true);
+          valid = false;
+        } else showError('secondsError', false);
+
+        if (!valid) {
+          showMessage('Please fill all required fields', true);
+          return;
+        }
+
+        // Disable fields
+        [dateInput, minutesInput, secondsInput, waterTempInput].forEach(
+          (el) => (el.disabled = true),
+        );
+        document.getElementById('progressContainer').style.display = 'block';
+
+        const payload = {
+          start:
+            new Date(dateInput.value).getTime() -
+            Number(minutesInput.value) * 60000 -
+            Number(secondsInput.value) * 1000,
+          end: new Date(dateInput.value).getTime(),
+          duration: `${minutesInput.value.padStart(2, '0')}:${secondsInput.value.padStart(2, '0')}`,
+          waterTemperature: waterTempInput.value || null,
+        };
+
+        google.script.run
+          .withSuccessHandler(() => {
+            const modal = M.Modal.getInstance(
+              document.getElementById('iceBathModal'),
+            );
+            modal.close();
+
+            const iframe = document.querySelector('#calendar');
+            iframe.src = iframe.src;
+
+            [dateInput, minutesInput, secondsInput, waterTempInput].forEach(
+              (el) => (el.disabled = false),
+            );
+            document.getElementById('progressContainer').style.display = 'none';
+          })
+          .withFailureHandler((err) => {
+            showMessage('Error: ' + err, true);
+            document.getElementById('progressContainer').style.display = 'none';
+
+            [dateInput, minutesInput, secondsInput, waterTempInput].forEach(
+              (el) => (el.disabled = false),
+            );
+          })
+          .logIceBath(payload);
+      }
+    </script>
   </body>
 </html>

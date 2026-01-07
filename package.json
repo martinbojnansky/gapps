@@ -3,11 +3,13 @@
   "author": "Martin Bojnansky",
   "scripts": {
     "login": "npx clasp login",
-    "deploy": "npx clasp push & npx clasp deploy -i AKfycbzK1dEllMjHyyXaHvfL5AjnGsTokKt72oqKQffF_JmNGzqBxK3hvu-MH3sanxC-3A8yCg -d dev",
-    "deploy:prod": "npx clasp push & npx clasp deploy -i AKfycbyWJGMLERKtbefj55nKSs-Bsfup0ZQWTVsTAjnUOMgUcDN53VegA0DlqeKI58gB8R6cqg -d prod"
+    "deploy": "npx clasp push & npx clasp deploy -i AKfycbzK1dEllMjHyyXaHvfL5AjnGsTokKt72oqKQffF_JmNGzqBxK3hvu-MH3sanxC-3A8yCg -d dev"
   },
   "devDependencies": {
     "clasp": "1.0.0",
     "prettier": "^3.7.4"
+  },
+  "dependencies": {
+    "@types/google-apps-script": "^2.0.8"
   }
 }
