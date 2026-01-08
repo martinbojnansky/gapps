@@ -11,9 +11,13 @@
           '&mode=MONTH',
       );
 
+      self.isAddMenuOpen = ko.observable(false);
+
       self.onAddClick = function () {
-        root.navigateToView('new-ice-bath-view');
+        self.isAddMenuOpen(!self.isAddMenuOpen());
       };
+
+      self.navigateToView = root.navigateToView;
     },
     template: `
       <div class="calendar-view">
@@ -30,8 +34,17 @@
           data-bind="click: onAddClick"
           aria-label="Add"
         >
-          <i class="bi bi-plus-lg"></i>
+          <i class="bi bi-plus-lg" data-bind="visible: !isAddMenuOpen()"></i>
+          <i class="bi bi-x-lg" data-bind="visible: isAddMenuOpen()"></i>
         </button>
+        <div 
+          class="dropdown-menu show position-fixed" 
+          style="bottom: 6rem; right: 1.5rem;" 
+          data-bind="visible: isAddMenuOpen"> 
+          <button class="dropdown-item" data-bind="click: () => navigateToView('new-ice-bath-view')">🧊 Ice Bath</button>
+          <button class="dropdown-item" data-bind="click: () => navigateToView('new-weight-view')">⚖️ Weight</button>
+        </div>
+
       </div>
     `,
   });

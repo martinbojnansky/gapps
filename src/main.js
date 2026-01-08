@@ -30,7 +30,7 @@ function include(filename) {
  * @return {Calendar} The calendar with the given name.
  */
 function getOrCreateCalendar() {
-  const name = 'Ice Baths';
+  const name = 'Log Book';
   const cal = CalendarApp.getCalendarsByName(name)[0];
   if (!cal) {
     cal = CalendarApp.createCalendar(name);
@@ -39,17 +39,20 @@ function getOrCreateCalendar() {
 }
 
 /**
- * Logs an ice bath event to the calendar.
+ * Adds a calendar event based on the given event object.
  *
- * @param {Object} iceBath - An object containing the start and end date of the ice bath, as well as the water temperature.
+ * The event object should contain the following properties:
+ * - title: The title of the event.
+ * - start: The start time of the event in milliseconds since the Unix epoch.
+ * - end: The end time of the event in milliseconds since the Unix epoch.
  *
- * @return {Object} - An object containing the HTTP status code of the response.
+ * @param {Object} event - The event object.
+ * @return {Object} An object with a single property, statusCode, set to 201.
  */
-
-function logIceBath(iceBath) {
+function addCalendarEvent(event) {
   const cal = getOrCreateCalendar();
-  cal.createEvent('Ice Bath', new Date(iceBath.start), new Date(iceBath.end), {
-    description: JSON.stringify(iceBath),
+  cal.createEvent(event.title, new Date(event.start), new Date(event.end), {
+    description: JSON.stringify(event),
   });
   return { statusCode: 201 };
 }
