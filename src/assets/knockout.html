@@ -1,0 +1,10 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
+<script>
+  ko.bindingHandlers.autoFocus = {
+    init: function (el) {
+      requestAnimationFrame(() => {
+        el.focus();
+      });
+    },
+  };
+</script>

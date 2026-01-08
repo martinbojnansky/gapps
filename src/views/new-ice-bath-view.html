@@ -1,0 +1,148 @@
+<script>
+  ko.components.register('new-ice-bath-view', {
+    viewModel: function (params) {
+      const self = this;
+      const root = params.root;
+
+      const now = new Date();
+      const localISO = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+        .toISOString()
+        .slice(0, 16);
+
+      self.date = ko.observable(localISO);
+      self.dateError = ko.observable(false);
+
+      self.minutes = ko.observable('');
+      self.minutesError = ko.observable(false);
+
+      self.seconds = ko.observable('');
+      self.secondsError = ko.observable(false);
+
+      self.waterTemp = ko.observable('');
+
+      self.isSaving = ko.observable(false);
+      self.errorMessage = ko.observable('');
+
+      self.validate = function () {
+        let valid = true;
+
+        self.dateError(!self.date());
+        self.minutesError(!self.minutes());
+        self.secondsError(!self.seconds());
+
+        if (!self.date() || !self.minutes() || !self.seconds()) valid = false;
+
+        if (!valid) self.errorMessage('Please fill all required fields');
+
+        return valid;
+      };
+
+      self.cancel = function () {
+        root.navigateToView('calendar-view');
+      };
+
+      self.save = function () {
+        self.errorMessage('');
+        if (!self.validate()) return;
+
+        self.isSaving(true);
+
+        const start =
+          new Date(self.date()).getTime() -
+          Number(self.minutes()) * 60000 -
+          Number(self.seconds()) * 1000;
+
+        const payload = {
+          start,
+          end: new Date(self.date()).getTime(),
+          duration:
+            `${String(self.minutes()).padStart(2, '0')}:` +
+            `${String(self.seconds()).padStart(2, '0')}`,
+          waterTemperature: self.waterTemp() || null,
+        };
+
+        google.script.run
+          .withSuccessHandler(() => {
+            root.navigateToView('calendar-view');
+          })
+          .withFailureHandler((err) => {
+            self.errorMessage('Error: ' + err);
+            self.isSaving(false);
+          })
+          .logIceBath(payload);
+      };
+    },
+
+    template: `
+      <form class="new-ice-bath-view container p-4" data-bind="submit: save" novalidate>
+  
+        <h3 class="mb-4">New Ice Bath</h3>
+  
+        <!-- Error message -->
+        <div data-bind="
+              visible: errorMessage"
+             class="alert alert-danger">
+          <span data-bind="text: errorMessage"></span>
+        </div>
+  
+        <!-- Date -->
+        <div class="mb-3">
+          <label class="form-label">Start Date & Time *</label>
+          <input type="datetime-local" class="form-control"
+                 data-bind="value: date, css: { 'is-invalid': dateError }, disable: isSaving" required />
+          <div class="invalid-feedback" data-bind="visible: dateError">Required</div>
+        </div>
+  
+        <div class="row">
+          <!-- Minutes -->
+          <div class="col-6 mb-3">
+            <label class="form-label">Minutes *</label>
+            <input type="number" min="0" class="form-control"
+                   data-bind="value: minutes, autoFocus: true, css: { 'is-invalid': minutesError }, disable: isSaving"
+                   required />
+            <div class="invalid-feedback" data-bind="visible: minutesError">Required</div>
+          </div>
+  
+          <!-- Seconds -->
+          <div class="col-6 mb-3">
+            <label class="form-label">Seconds *</label>
+            <input type="number" min="0" max="59" class="form-control"
+                   data-bind="value: seconds, css: { 'is-invalid': secondsError }, disable: isSaving"
+                   required />
+            <div class="invalid-feedback" data-bind="visible: secondsError">Required</div>
+          </div>
+        </div>
+  
+        <!-- Water Temp -->
+        <div class="mb-3">
+          <label class="form-label">Water Temperature (°C)</label>
+          <input type="number" step="0.1" class="form-control"
+                 data-bind="value: waterTemp, disable: isSaving" />
+        </div>
+  
+        <!-- Saving Spinner -->
+        <div class="my-3" data-bind="visible: isSaving">
+          <div class="spinner-border text-primary" role="status"></div>
+        </div>
+  
+        <!-- Buttons -->
+        <div class="d-flex justify-content-end gap-2 mt-4">
+  
+          <button type="submit"
+                  class="btn btn-primary px-4"
+                  data-bind="disable: isSaving">
+            Save
+          </button>
+  
+          <button type="button"
+                  class="btn btn-secondary px-4"
+                  data-bind="click: () => cancel(), disable: isSaving">
+            Cancel
+          </button>
+  
+        </div>
+  
+      </form>
+    `,
+  });
+</script>

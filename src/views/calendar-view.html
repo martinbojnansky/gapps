@@ -1,0 +1,38 @@
+<script>
+  ko.components.register('calendar-view', {
+    viewModel: function (params) {
+      const self = this;
+      const root = params.root;
+
+      self.calendarSrc = ko.pureComputed(
+        () =>
+          'https://calendar.google.com/calendar/embed?src=' +
+          encodeURIComponent(root.calendarId) +
+          '&mode=MONTH',
+      );
+
+      self.onAddClick = function () {
+        root.navigateToView('new-ice-bath-view');
+      };
+    },
+    template: `
+      <div class="calendar-view">
+        <iframe
+          id="calendar"
+          data-bind="attr: { src: calendarSrc }"
+          style="width: 100vw; height: 100vh; border: 0"
+        ></iframe>
+
+        <button
+          type="button"
+          class="btn btn-primary rounded-circle shadow position-fixed bottom-0 end-0 d-flex align-items-center justify-content-center"
+          style="width: 4rem; height: 4rem; font-size: 1.5rem; font-weight: 600; margin: 1rem 1.5rem;"
+          data-bind="click: onAddClick"
+          aria-label="Add"
+        >
+          <i class="bi bi-plus-lg"></i>
+        </button>
+      </div>
+    `,
+  });
+</script>
